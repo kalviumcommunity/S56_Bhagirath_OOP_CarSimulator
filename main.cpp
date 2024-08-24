@@ -14,7 +14,7 @@ class Car{
         this->fuellevel = fuellevel;
     }
     void startCar(){
-        if(fuellevel>0){
+        if(this->fuellevel>0){
             cout << brand << " " << model << " is Started." <<endl;
         }
         else{
