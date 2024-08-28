@@ -88,12 +88,12 @@ public:
 };
 
 int main() {
-    Sedan sedanCars[2] = {
+    Sedan* sedanCars = new Sedan[2]{
         Sedan("Toyota", "Camry", "Red", 50),
         Sedan("Honda", "Accord", "Blue", 60)
     };
 
-    SUV suvCars[2] = {
+    SUV* suvCars = new SUV[2]{
         SUV("Ford", "Explorer", "Black", 80),
         SUV("Jeep", "Cherokee", "Green", 70)
     };
@@ -107,7 +107,7 @@ int main() {
         cout << "Type: ";
         cin >> carType;
 
-        if (carType == 1) { // Sedan
+        if (carType == 1) { 
             cout << "\nChoose Sedan Car (0 or 1): ";
             cin >> carIndex;
 
@@ -130,9 +130,11 @@ int main() {
                 cin >> action;
 
                 if (action == 7) {
-                    break; // Exit the Sedan action menu to choose a different car type
+                    break; 
                 } else if (action == 8) {
                     cout << "Exiting the game. Goodbye!" << endl;
+                    delete[] sedanCars;
+                    delete[] suvCars;
                     return 0;
                 }
 
@@ -188,9 +190,11 @@ int main() {
                 cin >> action;
 
                 if (action == 8) {
-                    break; // Exit the SUV action menu to choose a different car type
+                    break;
                 } else if (action == 9) {
                     cout << "Exiting the game. Goodbye!" << endl;
+                    delete[] sedanCars;
+                    delete[] suvCars;
                     return 0;
                 }
 
@@ -229,6 +233,9 @@ int main() {
             cout << "Invalid car type! Please try again." << endl;
         }
     }
+
+    delete[] sedanCars;
+    delete[] suvCars;
 
     return 0;
 }
