@@ -9,12 +9,18 @@ private:
 public:
     string model;
     int fuellevel;
+    static int totalCars; 
 
     Car(string brand, string model, string color, int fuellevel) {
         this->brand = brand;
         this->model = model;
         this->color = color;
         this->fuellevel = fuellevel;
+        totalCars++; 
+    }
+
+    ~Car() {
+        totalCars--;
     }
 
     void startCar() {
@@ -46,6 +52,8 @@ public:
         cout << "Fuel Level: " << fuellevel << "%" << endl;
     }
 };
+
+int Car::totalCars = 0; 
 
 class Sedan : public Car {
 public:
@@ -92,7 +100,7 @@ int main() {
         Sedan("Toyota", "Camry", "Red", 50),
         Sedan("Honda", "Accord", "Blue", 60)
     };
-
+    cout<<sedanCars[0].totalCars;
     SUV* suvCars = new SUV[2]{
         SUV("Ford", "Explorer", "Black", 80),
         SUV("Jeep", "Cherokee", "Green", 70)
@@ -166,7 +174,7 @@ int main() {
                         break;
                 }
             }
-        } else if (carType == 2) { // SUV
+        } else if (carType == 2) { 
             cout << "\nChoose SUV Car (0 or 1): ";
             cin >> carIndex;
 
