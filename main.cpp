@@ -43,13 +43,15 @@ public:
             cout << "Fuel Tank is full." << endl;
         }
     }
-
     void getCarInfo() {
         cout << "Car Information: " << endl;
         cout << "Brand: " << brand << endl;
         cout << "Model: " << model << endl;
         cout << "Color: " << color << endl;
         cout << "Fuel Level: " << fuellevel << "%" << endl;
+    }
+     static int getTotalCars() { 
+        return totalCars;
     }
 };
 
@@ -100,7 +102,7 @@ int main() {
         Sedan("Toyota", "Camry", "Red", 50),
         Sedan("Honda", "Accord", "Blue", 60)
     };
-    cout<<sedanCars[0].totalCars;
+    cout << "Total Cars: " << Car::getTotalCars() << endl;
     SUV* suvCars = new SUV[2]{
         SUV("Ford", "Explorer", "Black", 80),
         SUV("Jeep", "Cherokee", "Green", 70)
