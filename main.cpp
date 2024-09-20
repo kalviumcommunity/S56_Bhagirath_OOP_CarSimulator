@@ -8,19 +8,41 @@ private:
 
 public:
     string model;
+    static int totalCars;
     int fuellevel;
-    static int totalCars; 
 
+    // Constructor
     Car(string brand, string model, string color, int fuellevel) {
         this->brand = brand;
         this->model = model;
         this->color = color;
         this->fuellevel = fuellevel;
-        totalCars++; 
+        totalCars++;
     }
 
+    // Destructor
     ~Car() {
         totalCars--;
+    }
+
+    // Accessor for brand
+    string getBrand() {
+        return brand;
+    }
+
+    // Mutator for brand
+    void setBrand(string newBrand) {
+        brand = newBrand;
+    }
+
+    // Accessor for color
+    string getColor() {
+        return color;
+    }
+
+    // Mutator for color
+    void setColor(string newColor) {
+        color = newColor;
     }
 
     void startCar() {
@@ -43,6 +65,7 @@ public:
             cout << "Fuel Tank is full." << endl;
         }
     }
+
     void getCarInfo() {
         cout << "Car Information: " << endl;
         cout << "Brand: " << brand << endl;
@@ -50,12 +73,50 @@ public:
         cout << "Color: " << color << endl;
         cout << "Fuel Level: " << fuellevel << "%" << endl;
     }
-     static int getTotalCars() { 
+
+    static int getTotalCars() {
         return totalCars;
     }
 };
 
-int Car::totalCars = 0; 
+int Car::totalCars = 0; // Initialize static variable
+
+class SUV : public Car {
+private:
+    bool fourByFourEngaged;
+
+public:
+    // Constructor
+    SUV(string brand, string model, string color, int fuellevel) : Car(brand, model, color, fuellevel), fourByFourEngaged(false) {}
+
+    // Accessor for 4x4 mode
+    bool isFourByFourEngaged() {
+        return fourByFourEngaged;
+    }
+
+    // Mutator for 4x4 mode
+    void setFourByFourEngaged(bool status) {
+        fourByFourEngaged = status;
+    }
+
+    void openBoot() {
+        cout << "Boot is Opened." << endl;
+    }
+
+    void drive() {
+        if (fuellevel > 0) {
+            cout << model << " (SUV) is driving on rough terrain!" << endl;
+            fuellevel -= 20;  // Use setter to decrease fuel
+        } else {
+            cout << model << " has no fuel left. Please refuel!" << endl;
+        }
+    }
+
+    void engage4x4() {
+        setFourByFourEngaged(true);  // Use setter to engage 4x4
+        cout << model << " (SUV) has engaged 4X4 mode for off-roading!" << endl;
+    }
+};
 
 class Sedan : public Car {
 public:
@@ -75,34 +136,13 @@ public:
     }
 };
 
-class SUV : public Car {
-public:
-    SUV(string brand, string model, string color, int fuellevel) : Car(brand, model, color, fuellevel) {}
-
-    void openBoot() {
-        cout << "Boot is Opened." << endl;
-    }
-
-    void drive() {
-        if (fuellevel > 0) {
-            cout << model << " (SUV) is driving on rough terrain!" << endl;
-            fuellevel -= 20;
-        } else {
-            cout << model << " has no fuel left. Please refuel!" << endl;
-        }
-    }
-
-    void engage4x4() {
-        cout << model << " (SUV) has engaged 4X4 mode for off-roading!" << endl;
-    }
-};
-
 int main() {
     Sedan* sedanCars = new Sedan[2]{
         Sedan("Toyota", "Camry", "Red", 50),
         Sedan("Honda", "Accord", "Blue", 60)
     };
     cout << "Total Cars: " << Car::getTotalCars() << endl;
+
     SUV* suvCars = new SUV[2]{
         SUV("Ford", "Explorer", "Black", 80),
         SUV("Jeep", "Cherokee", "Green", 70)
