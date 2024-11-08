@@ -11,7 +11,6 @@ public:
     static int totalCars;
     int fuellevel;
 
-    // Constructor
     Car(string brand, string model, string color, int fuellevel) {
         this->brand = brand;
         this->model = model;
@@ -20,27 +19,21 @@ public:
         totalCars++;
     }
 
-    // Destructor
     ~Car() {
         totalCars--;
     }
 
-    // Accessor for brand
     string getBrand() {
         return brand;
     }
-
-    // Mutator for brand
     void setBrand(string newBrand) {
         brand = newBrand;
     }
 
-    // Accessor for color
     string getColor() {
         return color;
     }
 
-    // Mutator for color
     void setColor(string newColor) {
         color = newColor;
     }
@@ -66,7 +59,7 @@ public:
         }
     }
 
-    void getCarInfo() {
+    virtual void displayInfo() {
         cout << "Car Information: " << endl;
         cout << "Brand: " << brand << endl;
         cout << "Model: " << model << endl;
@@ -79,22 +72,20 @@ public:
     }
 };
 
-int Car::totalCars = 0; // Initialize static variable
+int Car::totalCars = 0; 
 
 class SUV : public Car {
 private:
     bool fourByFourEngaged;
 
 public:
-    // Constructor
+ 
     SUV(string brand, string model, string color, int fuellevel) : Car(brand, model, color, fuellevel), fourByFourEngaged(false) {}
 
-    // Accessor for 4x4 mode
     bool isFourByFourEngaged() {
         return fourByFourEngaged;
     }
 
-    // Mutator for 4x4 mode
     void setFourByFourEngaged(bool status) {
         fourByFourEngaged = status;
     }
@@ -106,15 +97,20 @@ public:
     void drive() {
         if (fuellevel > 0) {
             cout << model << " (SUV) is driving on rough terrain!" << endl;
-            fuellevel -= 20;  // Use setter to decrease fuel
+            fuellevel -= 20;
         } else {
             cout << model << " has no fuel left. Please refuel!" << endl;
         }
     }
 
     void engage4x4() {
-        setFourByFourEngaged(true);  // Use setter to engage 4x4
+        setFourByFourEngaged(true);
         cout << model << " (SUV) has engaged 4X4 mode for off-roading!" << endl;
+    }
+
+    void displayInfo() override {
+        Car::displayInfo();
+        cout << "4X4 Mode: " << (fourByFourEngaged ? "Engaged" : "Not Engaged") << endl;
     }
 };
 
@@ -133,6 +129,11 @@ public:
         } else {
             cout << model << " has no fuel left. Please refuel!" << endl;
         }
+    }
+
+    void displayInfo() override {
+        Car::displayInfo();
+        cout << "This is a Sedan - Great for city driving!" << endl;
     }
 };
 
@@ -173,14 +174,14 @@ int main() {
                 cout << "3. Refuel Car" << endl;
                 cout << "4. Check Fuel" << endl;
                 cout << "5. Open Boot" << endl;
-                cout << "6. Get Car Info" << endl;
+                cout << "6. Display Car Info" << endl;
                 cout << "7. Change Car Type" << endl;
                 cout << "8. Exit" << endl;
                 cout << "Action: ";
                 cin >> action;
 
                 if (action == 7) {
-                    break; 
+                    break;
                 } else if (action == 8) {
                     cout << "Exiting the game. Goodbye!" << endl;
                     delete[] sedanCars;
@@ -209,7 +210,7 @@ int main() {
                         sedanCars[carIndex].openBoot();
                         break;
                     case 6:
-                        sedanCars[carIndex].getCarInfo();
+                        sedanCars[carIndex].displayInfo();
                         break;
                     default:
                         cout << "Invalid action! Please choose a valid option." << endl;
@@ -233,7 +234,7 @@ int main() {
                 cout << "4. Check Fuel" << endl;
                 cout << "5. Open Boot" << endl;
                 cout << "6. Engage 4X4" << endl;
-                cout << "7. Get Car Info" << endl;
+                cout << "7. Display Car Info" << endl;
                 cout << "8. Change Car Type" << endl;
                 cout << "9. Exit" << endl;
                 cout << "Action: ";
@@ -272,20 +273,7 @@ int main() {
                         suvCars[carIndex].engage4x4();
                         break;
                     case 7:
-                        suvCars[carIndex].getCarInfo();
+                        suvCars[carIndex].displayInfo();
                         break;
                     default:
-                        cout << "Invalid action! Please choose a valid option." << endl;
-                        break;
-                }
-            }
-        } else {
-            cout << "Invalid car type! Please try again." << endl;
-        }
-    }
-
-    delete[] sedanCars;
-    delete[] suvCars;
-
-    return 0;
-}
+                        cout << "Invalid action! Please choose a valid
