@@ -19,13 +19,14 @@ public:
         totalCars++;
     }
 
-    ~Car() {
+    virtual ~Car() {
         totalCars--;
     }
 
     string getBrand() {
         return brand;
     }
+
     void setBrand(string newBrand) {
         brand = newBrand;
     }
@@ -67,20 +68,22 @@ public:
         cout << "Fuel Level: " << fuellevel << "%" << endl;
     }
 
+    virtual void drive() = 0;
+
     static int getTotalCars() {
         return totalCars;
     }
 };
 
-int Car::totalCars = 0; 
+int Car::totalCars = 0;
 
 class SUV : public Car {
 private:
     bool fourByFourEngaged;
 
 public:
- 
-    SUV(string brand, string model, string color, int fuellevel) : Car(brand, model, color, fuellevel), fourByFourEngaged(false) {}
+    SUV(string brand, string model, string color, int fuellevel)
+        : Car(brand, model, color, fuellevel), fourByFourEngaged(false) {}
 
     bool isFourByFourEngaged() {
         return fourByFourEngaged;
@@ -94,7 +97,7 @@ public:
         cout << "Boot is Opened." << endl;
     }
 
-    void drive() {
+    void drive() override {
         if (fuellevel > 0) {
             cout << model << " (SUV) is driving on rough terrain!" << endl;
             fuellevel -= 20;
@@ -116,13 +119,14 @@ public:
 
 class Sedan : public Car {
 public:
-    Sedan(string brand, string model, string color, int fuellevel) : Car(brand, model, color, fuellevel) {}
+    Sedan(string brand, string model, string color, int fuellevel)
+        : Car(brand, model, color, fuellevel) {}
 
     void openBoot() {
         cout << "Boot is Opened." << endl;
     }
 
-    void drive() {
+    void drive() override {
         if (fuellevel > 0) {
             cout << model << " is driving smoothly!" << endl;
             fuellevel -= 10;
@@ -276,4 +280,9 @@ int main() {
                         suvCars[carIndex].displayInfo();
                         break;
                     default:
-                        cout << "Invalid action! Please choose a valid
+                        cout << "Invalid action! Please choose a valid option." << endl;
+                        break;
+                }
+            }
+        } else {
+            cout << "Invalid car type! Please choose 1 (Sed
