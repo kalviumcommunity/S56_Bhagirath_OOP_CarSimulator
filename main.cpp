@@ -1,166 +1,114 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Car {
-private:
+protected:
     string brand;
+    string model;
     string color;
+    int fuelLevel;
 
 public:
-    string model;
-    static int totalCars;
-    int fuellevel;
+    Car(string brand, string model, string color, int fuelLevel)
+        : brand(brand), model(model), color(color), fuelLevel(fuelLevel) {}
 
-    Car(string brand, string model, string color, int fuellevel) {
-        this->brand = brand;
-        this->model = model;
-        this->color = color;
-        this->fuellevel = fuellevel;
-        totalCars++;
-    }
-
-    virtual ~Car() {
-        totalCars--;
-    }
-
-    string getBrand() {
-        return brand;
-    }
-
-    void setBrand(string newBrand) {
-        brand = newBrand;
-    }
-
-    string getColor() {
-        return color;
-    }
-
-    void setColor(string newColor) {
-        color = newColor;
-    }
-
-    void startCar() {
-        if (fuellevel > 0) {
-            cout << brand << " " << model << " is started." << endl;
-        } else {
-            cout << "Out of fuel, please refuel." << endl;
-        }
-    }
+    virtual ~Car() {}
 
     virtual void drive() = 0;
 
-    static int getTotalCars() {
-        return totalCars;
-    }
-};
+    string getBrand() const { return brand; }
+    string getModel() const { return model; }
+    string getColor() const { return color; }
+    int getFuelLevel() const { return fuelLevel; }
 
-int Car::totalCars = 0;
-
-class FuelManager {
-public:
-    static void refuel(Car& car, int amount) {
-        if (car.fuellevel + amount <= 100) {
-            car.fuellevel += amount;
-            cout << "Fuel Level increased by " << amount << " litres." << endl;
+    void refuel(int amount) {
+        if (fuelLevel + amount <= 100) {
+            fuelLevel += amount;
+            cout << "Refueled by " << amount << " liters. Current fuel level: " << fuelLevel << endl;
         } else {
-            cout << "Fuel Tank is full." << endl;
+            cout << "Fuel tank is full." << endl;
         }
-    }
-
-    static void checkFuel(const Car& car) {
-        cout << car.getBrand() << " " << car.model << " has " << car.fuellevel << " litres remaining." << endl;
-    }
-};
-
-class CarDisplay {
-public:
-    static void displayInfo(const Car& car) {
-        cout << "Car Information: " << endl;
-        cout << "Brand: " << car.getBrand() << endl;
-        cout << "Model: " << car.model << endl;
-        cout << "Color: " << car.getColor() << endl;
-        cout << "Fuel Level: " << car.fuellevel << "%" << endl;
-    }
-};
-
-class SUV : public Car {
-private:
-    bool fourByFourEngaged;
-
-public:
-    SUV(string brand, string model, string color, int fuellevel)
-        : Car(brand, model, color, fuellevel), fourByFourEngaged(false) {}
-
-    bool isFourByFourEngaged() {
-        return fourByFourEngaged;
-    }
-
-    void setFourByFourEngaged(bool status) {
-        fourByFourEngaged = status;
-    }
-
-    void openBoot() {
-        cout << "Boot is opened." << endl;
-    }
-
-    void drive() override {
-        if (fuellevel > 0) {
-            cout << model << " (SUV) is driving on rough terrain!" << endl;
-            fuellevel -= 20;
-        } else {
-            cout << model << " has no fuel left. Please refuel!" << endl;
-        }
-    }
-
-    void engage4x4() {
-        setFourByFourEngaged(true);
-        cout << model << " (SUV) has engaged 4X4 mode for off-roading!" << endl;
     }
 };
 
 class Sedan : public Car {
 public:
-    Sedan(string brand, string model, string color, int fuellevel)
-        : Car(brand, model, color, fuellevel) {}
-
-    void openBoot() {
-        cout << "Boot is opened." << endl;
-    }
+    Sedan(string brand, string model, string color, int fuelLevel)
+        : Car(brand, model, color, fuelLevel) {}
 
     void drive() override {
-        if (fuellevel > 0) {
-            cout << model << " is driving smoothly!" << endl;
-            fuellevel -= 10;
+        if (fuelLevel > 0) {
+            cout << "Driving the sedan smoothly on the road!" << endl;
+            fuelLevel -= 10;
         } else {
-            cout << model << " has no fuel left. Please refuel!" << endl;
+            cout << "No fuel left. Please refuel the sedan." << endl;
         }
     }
 };
 
+class SUV : public Car {
+public:
+    SUV(string brand, string model, string color, int fuelLevel)
+        : Car(brand, model, color, fuelLevel) {}
+
+    void drive() override {
+        if (fuelLevel > 0) {
+            cout << "Driving the SUV on rough terrain!" << endl;
+            fuelLevel -= 15;
+        } else {
+            cout << "No fuel left. Please refuel the SUV." << endl;
+        }
+    }
+
+    void engage4x4() {
+        cout << "4x4 mode engaged for off-roading!" << endl;
+    }
+};
+
+class CarDisplay {
+public:
+    static void displayCarInfo(const Car& car) {
+        cout << "Brand: " << car.getBrand() << ", Model: " << car.getModel()
+             << ", Color: " << car.getColor() << ", Fuel Level: " << car.getFuelLevel() << "%" << endl;
+    }
+};
+
+class CarService {
+public:
+    void performMaintenance(Car& car) {
+        cout << "Performing general maintenance on " << car.getBrand() << " " << car.getModel() << endl;
+    }
+};
+
+class SUVService : public CarService {
+public:
+    void performMaintenance(Car& car) override {
+        cout << "Performing specialized maintenance for SUV: " << car.getBrand() << " " << car.getModel() << endl;
+    }
+
+    void perform4x4Check(SUV& suv) {
+        cout << "Checking 4x4 functionality on the SUV." << endl;
+    }
+};
+
 int main() {
-    Sedan sedan("Toyota", "Camry", "Red", 50);
-    SUV suv("Ford", "Explorer", "Black", 80);
+    Sedan mySedan("Toyota", "Camry", "Red", 70);
+    SUV mySUV("Ford", "Explorer", "Black", 80);
 
-    cout << "Total Cars: " << Car::getTotalCars() << endl;
+    CarDisplay::displayCarInfo(mySedan);
+    CarDisplay::displayCarInfo(mySUV);
 
-    FuelManager::checkFuel(sedan);
-    FuelManager::refuel(sedan, 30);
+    mySedan.drive();
+    mySUV.drive();
 
-    CarDisplay::displayInfo(sedan);
-    
-    sedan.startCar();
-    sedan.drive();
-    FuelManager::checkFuel(sedan);
+    CarService carService;
+    SUVService suvService;
 
-    suv.startCar();
-    suv.drive();
-    FuelManager::checkFuel(suv);
-    
-    suv.engage4x4();
-    CarDisplay::displayInfo(suv);
-
-    cout << "Total Cars: " << Car::getTotalCars() << endl;
+    carService.performMaintenance(mySedan);
+    suvService.performMaintenance(mySUV);
+    suvService.perform4x4Check(mySUV);
 
     return 0;
 }
