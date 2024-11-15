@@ -67,6 +67,33 @@ public:
     }
 };
 
+// Abstraction for car services
+class CarServiceInterface {
+public:
+    virtual void performMaintenance(Car& car) = 0;
+    virtual ~CarServiceInterface() {}
+};
+
+// General car service implementing the interface
+class GeneralCarService : public CarServiceInterface {
+public:
+    void performMaintenance(Car& car) override {
+        cout << "Performing general maintenance on " << car.getBrand() << " " << car.getModel() << endl;
+    }
+};
+
+// Specialized SUV service implementing the interface
+class SUVService : public CarServiceInterface {
+public:
+    void performMaintenance(Car& car) override {
+        cout << "Performing specialized maintenance for SUV: " << car.getBrand() << " " << car.getModel() << endl;
+    }
+
+    void perform4x4Check(SUV& suv) {
+        cout << "Checking 4x4 functionality on the SUV." << endl;
+    }
+};
+
 class CarDisplay {
 public:
     static void displayCarInfo(const Car& car) {
@@ -75,21 +102,15 @@ public:
     }
 };
 
-class CarService {
-public:
-    void performMaintenance(Car& car) {
-        cout << "Performing general maintenance on " << car.getBrand() << " " << car.getModel() << endl;
-    }
-};
+class Garage {
+private:
+    CarServiceInterface& service;
 
-class SUVService : public CarService {
 public:
-    void performMaintenance(Car& car) override {
-        cout << "Performing specialized maintenance for SUV: " << car.getBrand() << " " << car.getModel() << endl;
-    }
+    Garage(CarServiceInterface& service) : service(service) {}
 
-    void perform4x4Check(SUV& suv) {
-        cout << "Checking 4x4 functionality on the SUV." << endl;
+    void performService(Car& car) {
+        service.performMaintenance(car);
     }
 };
 
@@ -103,11 +124,14 @@ int main() {
     mySedan.drive();
     mySUV.drive();
 
-    CarService carService;
+    GeneralCarService generalService;
     SUVService suvService;
 
-    carService.performMaintenance(mySedan);
-    suvService.performMaintenance(mySUV);
+    Garage sedanGarage(generalService);
+    Garage suvGarage(suvService);
+
+    sedanGarage.performService(mySedan);
+    suvGarage.performService(mySUV);
     suvService.perform4x4Check(mySUV);
 
     return 0;
